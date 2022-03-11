@@ -37,6 +37,16 @@ dependencies:
 
   lottie: 1.2.2
 
+  # https://github.com/flutterchina/dio
+  dio: ^4.0.4
+
+  # https://pub.dev/packages/dio_cookie_manager
+  dio_cookie_manager: 2.0.0
+
+  flutter_screenutil: 5.3.1
+
+  fluttertoast: 8.0.9
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
