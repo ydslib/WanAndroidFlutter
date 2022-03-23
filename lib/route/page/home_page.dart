@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sensors/flutter_sensors.dart';
 import 'package:wanandroid_flutter/res/colors.dart';
 import 'package:wanandroid_flutter/route/api/wan_repository.dart';
+import 'package:wanandroid_flutter/route/util/shake_util.dart';
 
 import '../model/model.dart';
+import '../widget/draggable_bottomsheet_loadmore.dart';
 import '../widget/favorite_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,6 +47,7 @@ class _HomePage extends State<HomePage> {
     super.initState();
     _bannerList();
     _getArticleList();
+    initSensor();
   }
 
   void _bannerList() {
@@ -180,9 +186,11 @@ class _HomePage extends State<HomePage> {
                               ),
                             ),
                             Expanded(child: Text('')),
-                            FavoriteWidget(onChanged: (v){
-                              print("FavoriteWidget:$v");
-                            },),
+                            FavoriteWidget(
+                              onChanged: (v) {
+                                print("FavoriteWidget:$v");
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -195,11 +203,27 @@ class _HomePage extends State<HomePage> {
                 })));
   }
 
-  Widget _favoriteSelect(int index) {
-    if (articles[index].collect == true) {
-      return const Icon(Icons.favorite);
-    } else {
-      return const Icon(Icons.favorite_rounded);
-    }
+  void initSensor() {
+    bool isShow = false;
+    ShakeUtil.getInstance().setOnShakeListener(() {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DraggableLoadingBottomSheet()));
+    });
+
+    ShakeUtil.getInstance().checkAccelerometerStatus().then((value) {
+      print("------$value");
+      if (value) {
+        ShakeUtil.getInstance().startAccelerometer(accelAvailable: value);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    ShakeUtil.getInstance().dispose();
   }
 }
