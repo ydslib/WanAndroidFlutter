@@ -38,18 +38,6 @@ class MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initDio();
-    // initScreenSize();
-  }
-
-  void initScreenSize(){
-    ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
-        designSize: const Size(375, 812),
-        context: context,
-        minTextAdapt: true,
-        orientation: Orientation.portrait);
   }
 
   void initDio() {

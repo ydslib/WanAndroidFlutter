@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sensors/flutter_sensors.dart';
 import 'package:wanandroid_flutter/res/colors.dart';
@@ -10,8 +11,9 @@ import 'package:wanandroid_flutter/route/api/wan_repository.dart';
 import 'package:wanandroid_flutter/route/util/shake_util.dart';
 
 import '../model/model.dart';
-import '../widget/draggable_bottomsheet_loadmore.dart';
+import '../widget/demo/material.dart';
 import '../widget/favorite_widget.dart';
+import 'item/home_article_item.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,7 +26,7 @@ class _HomePage extends State<HomePage> {
   bool refreshBanner = true;
   List<String> banners = [];
   List<ArticleModel> articles = [];
-  int itemCount = 0;
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class _HomePage extends State<HomePage> {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children: [_bannerView(), _articleList()]),
+              children: [_bannerView(), _refreshWidget()]),
         ));
   }
 
@@ -46,8 +48,31 @@ class _HomePage extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     _bannerList();
-    _getArticleList();
+    _getArticleList(index);
     initSensor();
+  }
+
+  Widget _refreshWidget() {
+    return Expanded(
+        child: EasyRefresh.custom(
+      header: MaterialHeader(),
+      footer: MaterialFooter(),
+      onRefresh: () async {
+        index = 0;
+        _getArticleList(index);
+      },
+      onLoad: () async {
+        _getArticleList(++index);
+      },
+      slivers: <Widget>[
+        SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          return ArticleItem(
+            item: articles[index],
+          );
+        }, childCount: articles.length))
+      ],
+    ));
   }
 
   void _bannerList() {
@@ -69,13 +94,11 @@ class _HomePage extends State<HomePage> {
     });
   }
 
-  void _getArticleList() {
-    WanRepository().getArticleList(page: 0).then((value) {
-      print('-----$value');
+  void _getArticleList(int index) async {
+    WanRepository().getArticleList(page: index).then((value) {
       if (value != null) {
         setState(() {
           articles.addAll(value);
-          print('-----${articles[0].fresh}');
         });
       }
     });
@@ -206,14 +229,11 @@ class _HomePage extends State<HomePage> {
   void initSensor() {
     bool isShow = false;
     ShakeUtil.getInstance().setOnShakeListener(() {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DraggableLoadingBottomSheet()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => MaterialStylePage()));
     });
 
     ShakeUtil.getInstance().checkAccelerometerStatus().then((value) {
-      print("------$value");
       if (value) {
         ShakeUtil.getInstance().startAccelerometer(accelAvailable: value);
       }

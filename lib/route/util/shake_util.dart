@@ -18,7 +18,6 @@ class ShakeUtil {
 
   ShakeUtil._init() {
     isShow = false;
-    print("-------_init----------");
   }
 
   factory ShakeUtil() {
@@ -54,7 +53,6 @@ class ShakeUtil {
         double x = sensorEvent.data[0];
         double y = sensorEvent.data[1];
         double z = sensorEvent.data[2];
-        print("------$x------$y--------$z");
 
         if (x >= value ||
             x < -value ||
