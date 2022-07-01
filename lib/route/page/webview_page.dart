@@ -19,7 +19,7 @@ class _WebViewPage extends State<WebViewPage> {
     // TODO: implement initState
     super.initState();
     if (Platform.isAndroid) {
-      WebView.platform = AndroidWebView();
+      WebView.platform = SurfaceAndroidWebView();
     }
   }
 
@@ -27,12 +27,15 @@ class _WebViewPage extends State<WebViewPage> {
   Widget build(BuildContext context) {
     String? url = widget.url;
 
-    return WebView(
-      initialUrl: url,
-      javascriptMode: JavascriptMode.unrestricted,
-      navigationDelegate: (NavigationRequest request) {
-        return NavigationDecision.prevent;
-      },
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: WebView(
+        initialUrl: url,
+        javascriptMode: JavascriptMode.unrestricted,
+        navigationDelegate: (NavigationRequest request) {
+          return NavigationDecision.prevent;
+        },
+      ),
     );
   }
 }
