@@ -55,7 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
       label: "知识体系",
     ),
     const BottomNavigationBarItem(icon: Icon(Icons.navigation_outlined), label: "导航"),
-    const BottomNavigationBarItem(icon: Icon(Icons.folder_outlined), label: "项目"),
+    const BottomNavigationBarItem(icon: SizedBox(width: 24,height: 24,child: Image(image: AssetImage("assets/images/mine.png"))),
+        label: "我的",activeIcon: SizedBox(width: 24,height: 24,child: Image(image: AssetImage("assets/images/mine_selected.png")))),
   ];
 
   final pages = <Widget>[
