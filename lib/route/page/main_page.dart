@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wanandroid_flutter/route/page/project_page.dart';
+import 'package:wanandroid_flutter/route/page/mine_page.dart';
 
 import 'home_page.dart';
 import 'knowledge_page.dart';
@@ -27,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        items: bottomNavBarItems,
+        items: getBottomItemList(),
         currentIndex: _currentIndex,
         selectedItemColor: Colors.deepOrange,
         unselectedItemColor: Colors.grey,
@@ -45,25 +45,27 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  final List<BottomNavigationBarItem> bottomNavBarItems = [
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.home_outlined),
-      label: "首页",
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.dashboard_customize_outlined),
-      label: "知识体系",
-    ),
-    const BottomNavigationBarItem(icon: Icon(Icons.navigation_outlined), label: "导航"),
-    BottomNavigationBarItem(icon: SizedBox(width: 24.w,height: 24.w,child: Image(image: AssetImage("assets/images/mine.png"))),
-        label: "我的",activeIcon: SizedBox(width: 24.w,height: 24.w,child: Image(image: AssetImage("assets/images/mine_selected.png")))),
-  ];
+  List<BottomNavigationBarItem> getBottomItemList(){
+    return [
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.home_outlined),
+        label: "首页",
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.dashboard_customize_outlined),
+        label: "知识体系",
+      ),
+      const BottomNavigationBarItem(icon: Icon(Icons.navigation_outlined), label: "导航"),
+      BottomNavigationBarItem(icon: SizedBox(width: 24.w,height: 24.w,child: Image(image: AssetImage("assets/images/mine.png"))),
+          label: "我的",activeIcon: SizedBox(width: 24.w,height: 24.w,child: Image(image: AssetImage("assets/images/mine_selected.png")))),
+    ];
+  }
 
   final pages = <Widget>[
     HomePage(),
     KnowledgePage(),
     NavigationPage(),
-    ProjectPage()
+    MinePage()
   ];
 
   void initScreenUtil() {
